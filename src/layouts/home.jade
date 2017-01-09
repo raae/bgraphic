@@ -1,0 +1,12 @@
+extends layout
+
+block main
+  if collections.articles && collections.articles.length > 0
+    ul
+      each article in collections.articles
+        li
+          h1
+            a(href='/'+article.path)!= article.title
+          section
+            span= article.readingTime + '-minute read' 
+            time= moment(article.publish).format("MMMM Do YYYY")
