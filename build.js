@@ -75,7 +75,10 @@ var ms = metalsmith(dir.base)
   .source(dir.source + 'html/') // source folder (src/html/)
   .destination(dir.dest) // build folder (build/)
   .metadata(meta) // add meta data to every page
-  .use(publish()) // draft, private, future-dated
+  .use(publish({
+    draft: devBuild,
+    private: devBuild
+  })) // draft, private, future-dated
   .use((files, metalsmith, done) => {
     // hack to make sure collections are not doubled when using browsersync
     metalsmith._metadata.collections = null
