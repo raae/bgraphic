@@ -5,4 +5,5 @@ section
   span= entry.readingTime + '-minute read' 
   time= moment(entry.publish).format("MMMM Do YYYY")
 
-p!= entry.excerpt
+section
+  p!= entry.blurb
