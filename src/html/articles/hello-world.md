@@ -1,6 +1,6 @@
 ---
 title: Hello World
-excerpt: My new year's resolution this year is this blog!
+blurb: My new year's resolution this year is this blog!
 publish: 2016-01-09
 ---
 

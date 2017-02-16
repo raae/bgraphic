@@ -1,6 +1,6 @@
 ---
 title: Varsom
-excerpt: Native iOS app displaying avalanche, flood and landslide warning forecasts.
+blurb: Native iOS app version of varsom.no.
 year: 2013 - 2016
 type: iOS app
 role: Developer, UX/UI designer

@@ -1,0 +1,28 @@
+extends layout
+
+block main
+  article
+    header
+      h1= title
+      section
+        if year
+          span= year 
+        if client
+          span= client
+    section
+      p!= blurb
+    section
+      if tech
+        strong Technologies: 
+        span= tech
+        br
+      if notice
+        strong Notable: 
+        span= notice
+        br
+      if links
+        strong Links: 
+        each val, key in links
+          span
+            a(href=val)!= key
+    section!= contents

@@ -28,6 +28,7 @@ var
   excerpts = require('metalsmith-excerpts'),
   publish = require('metalsmith-publish'),
   wordcount = require("metalsmith-word-count"),
+  fileMetadata = require('metalsmith-filemetadata'),
   collections = require('metalsmith-collections'),
   branch = require('metalsmith-branch'),
   paths = require('metalsmith-paths'),
@@ -89,14 +90,22 @@ var ms = metalsmith(dir.base)
   .use(wordcount({
     raw: true
   })) // word count
+  .use(fileMetadata([
+    { 
+      pattern: "projects/*", 
+      metadata: {
+        "layout": "project.pug"
+      }
+    },
+  ]))
   .use(collections({
     articles: {
-      pattern: 'articles/**.html',
+      pattern: 'articles/*',
       sortBy: 'date',
       reverse: true
     },
     projects: {
-      pattern: 'projects/**.html',
+      pattern: 'projects/*',
       sortBy: 'year',
       reverse: true
     }
@@ -106,6 +115,10 @@ var ms = metalsmith(dir.base)
       {
         match: { collection: 'articles' },
         pattern: 'blog/:basename'
+      },
+      {
+        match: { collection: 'projects' },
+        pattern: 'project/:basename'
       },
       {
         match: { collection: 'projects' },

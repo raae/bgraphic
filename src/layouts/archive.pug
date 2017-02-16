@@ -1,11 +1,12 @@
 extends layout
 
 block main
-  header
-    h1= title
-    section
-      span= description
-  section!= contents
+  article
+    header
+      h1= title
+      section
+        span= description
+    section!= contents
 
   section
     if archive.title 
