@@ -1,8 +1,6 @@
 ---
 title: Kahoot
-year: 2013
 description: New static website with content in Wordpress.
-publish: draft
 layout: archive.pug
 archive:
   collection: projects
