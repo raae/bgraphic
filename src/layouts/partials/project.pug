@@ -1,0 +1,25 @@
+h2= entry.title
+section
+  if entry.year
+    span= entry.year 
+  if entry.client
+    span= entry.client
+section
+  p= entry.excerpt
+section
+  if entry.tech
+    strong Technologies: 
+    span= entry.tech
+    br
+  if entry.notice
+    strong Notice: 
+    span= entry.notice
+    br
+  if entry.links
+    strong Links: 
+    each val, key in entry.links
+      span
+        a(href=val)!= key
+section
+  h3 Description
+  != entry.contents
