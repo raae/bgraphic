@@ -101,7 +101,7 @@ section > ul li {
   margin: calc(1rem + 1vw) auto;
 }
 
-section > ul li > section:not(:nth-child(1)) span + span:before {
+section > ul li > section:not(:nth-child(2)) span + span:before {
   content: ", \0020";
   text-decoration: none;
 }
