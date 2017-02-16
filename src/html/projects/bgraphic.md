@@ -1,7 +1,7 @@
 ---
 title: bGraphic
-excerpt: This statically generated website.
-year: 2017 - present
+excerpt: This (bgraphic.no) statically generated website.
+year: 2017
 type: Website
 role: Developer, UX/UI designer
 tech: Metalsmith (Static Site Generator)
@@ -11,7 +11,7 @@ links:
   GitHub: https://github.com/raae/bgraphic
 ---
 
-My technical goal for this site is to go back to basic. No use of CSS or JS frameworks. 
+My technical goal for this site (bgraphic.no) is to go back to basic. No use of CSS or JS frameworks. 
 I have not needed JavaScript yet, but when I do it will be of the vanilla flavour.
 
 At the same time it is modern take on a basic website by using the Static Generator Metalsmith

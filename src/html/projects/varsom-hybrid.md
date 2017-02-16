@@ -1,6 +1,6 @@
 ---
 title: Varsom
-excerpt: Ionic app displaying avalanche, flood and landslide warning forecasts.
+excerpt: Hybrid app displaying avalanche, flood and landslide warning forecasts.
 year: 2016 - present
 type: Hybrid app
 role: Developer, UX/UI designer
