@@ -39,6 +39,10 @@ a:hover {
   text-decoration: none;
 }
 
+strong {
+  font-weight: 600;
+}
+
 p {
   margin: 0.5em 0;
 }
@@ -97,8 +101,17 @@ section > ul li {
   margin: calc(1rem + 1vw) auto;
 }
 
+section > ul li > section:not(:nth-child(1)) span + span:before {
+  content: ", \0020";
+  text-decoration: none;
+}
+
+section > ul li > section:last-child {
+  font-size: 0.9em;
+}
+
 section > ul li h2,
-article > h2 + ul li h3,
+main > header h1,
 article > header h1 {
   margin: 0;
 }
@@ -115,16 +128,25 @@ article > section h3 {
   font-size: 1em;
 }
 
-section > ul li h2 + section *,
-article > header section * {
-  color: gray;
+section > ul li h2 + section > *,
+main > header section > *,
+article > header section > * {
+  color: gray !important;
   font-size: 0.8em;
   line-height: 1;
 }
 
-section > ul li h2 + section *:not(:first-child):before,
-article > header section *:not(:first-child):before {
+section > ul li h2 + section > * + *:before,
+article > header section * + *:before {
   content: "\0020/\0020";
+}
+
+article > header section > a:hover {
+  background: none;
+}
+
+article > header section > a:hover span {
+  border-bottom: 1px solid currentColor;
 }
 
 body > nav,
@@ -144,6 +166,10 @@ body > nav a {
   line-height: 1;
 }
 
+body > nav a:hover {
+  background: none;
+}
+
 body > nav a:hover span {
   display: inline-block;
   border-bottom: 2px solid currentColor;
@@ -154,13 +180,8 @@ body > nav a:first-child span {
   font-weight: 600;
 }
 
-body > nav a:hover {
-  background: none;
-}
-
-body > nav a:not(:first-child):before {
+body > nav a + a:before {
   content: "\0020/\0020";
-  text-decoration: none !important;
 }
 
 body > aside {
@@ -185,7 +206,8 @@ body > aside article h1 {
 
 body > aside > img:first-child:last-child {
   display: block;
-  border-bottom: 4px solid darkorange;
+  border: solid darkorange;
+  border-width: 4px 0;
 }
 
 body > footer {

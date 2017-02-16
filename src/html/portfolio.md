@@ -1,5 +1,6 @@
 ---
 title: Portfolio
 layout: archive.pug
-archive: projects
+archive:
+  collection: projects
 ---

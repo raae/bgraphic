@@ -21,6 +21,6 @@ My New Years's resolution for 2017 is to get a developer blog going. Any day now
 movement over in the [blog section](/blog).
 
 bGraphic.no has been my home on the Interwebz since 2006. It is a tribute to my childhood's 
-wish to be a graphic designer.
+dream to be a graphic designer.
 
 <cite>Benedicte</cite>

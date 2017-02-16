@@ -22,15 +22,8 @@ html
         block main
         
       aside
-        block footer
-          img(src="/images/splash.jpeg", alt="Photo of me")
-      aside
-        block aside
-          if collections.common && collections.common.length > 0
-            each common in collections.common
-              article
-                h1= common.title
-                div!= common.contents
+        img(src="/images/splash.jpeg", alt="Photo of me")
+
       footer
         if site.social && site.social.length > 0
           img(src="/images/avatar.jpeg", alt="Another photo of me")

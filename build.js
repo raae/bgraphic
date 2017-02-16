@@ -80,14 +80,8 @@ var ms = metalsmith(dir.base)
   })) // draft, private, future-dated
   .use((files, metalsmith, done) => {
     // hack to make sure collections are not doubled when using browsersync
-    console.log(metalsmith._metadata);
-    metalsmith._metadata.collections = null;
     metalsmith._metadata.articles = [];
     metalsmith._metadata.projects = [];
-    metalsmith._metadata.proposals = [];
-    metalsmith._metadata.common = [];
-
-    console.log(metalsmith._metadata);
     done();
   })
   .use(markdown()) // convert markdown
@@ -105,29 +99,16 @@ var ms = metalsmith(dir.base)
       pattern: 'projects/**.html',
       sortBy: 'year',
       reverse: true
-    },
-    proposals: {
-      pattern: 'proposals/**.html',
-    },
-    common: {
-      pattern: 'index.html'
     }
   }))
   .use(permalinks({
     linksets: [
-      {
-        match: { collection: 'common' },
-      },
       {
         match: { collection: 'articles' },
         pattern: 'blog/:basename'
       },
       {
         match: { collection: 'projects' },
-      },
-      {
-        match: { collection: 'proposals' },
-        pattern: ':basename'
       }
     ]
   }))

@@ -8,12 +8,14 @@ block main
   section!= contents
 
   section
-    - var entries = collections[archive]
+    if archive.title 
+      h1!= archive.title 
+    - var entries = collections[archive.collection]
     if entries && entries.length > 0
       ul
         each entry in entries
           li
-            if archive === 'projects'
+            if archive.collection === 'projects'
               include partials/project
             else
               include partials/article
