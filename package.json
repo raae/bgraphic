@@ -1,7 +1,7 @@
 {
   "name": "bgraphic-dev-blog",
-  "version": "1.0.0",
-  "description": "Benedict Raae's dev blog",
+  "version": "1.1.0",
+  "description": "Benedict Raae's home on the interwebz",
   "homepage": "bgraphic.no",
   "main": "build.js",
   "scripts": {

@@ -1,0 +1,19 @@
+extends layout
+
+block main
+  header
+    h1= title
+    section
+      span= description
+  section!= contents
+
+  section
+    - var entries = collections[archive]
+    if entries && entries.length > 0
+      ul
+        each entry in entries
+          li
+            if archive === 'projects'
+              include partials/project
+            else
+              include partials/article

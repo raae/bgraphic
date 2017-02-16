@@ -1,0 +1,8 @@
+//- partials/article
+h2
+  a(href='/'+entry.path)!= entry.title
+section
+  span= entry.readingTime + '-minute read' 
+  time= moment(entry.publish).format("MMMM Do YYYY")
+
+p!= entry.excerpt
