@@ -30,6 +30,7 @@ var
   wordcount = require("metalsmith-word-count"),
   collections = require('metalsmith-collections'),
   branch = require('metalsmith-branch'),
+  paths = require('metalsmith-paths'),
   permalinks = require('metalsmith-permalinks'),
   layouts = require('metalsmith-layouts'),
   moment = require('moment'),
@@ -38,11 +39,6 @@ var
   assets = require('metalsmith-assets'),
   htmlmin = devBuild ? null : require('metalsmith-html-minifier'),
   browsersync = devBuild ? require('metalsmith-browser-sync') : null,
-
-  // custom plugins
-  setdate = require(dir.lib + 'metalsmith-setdate'),
-  moremeta = require(dir.lib + 'metalsmith-moremeta'),
-  debug = consoleLog ? require(dir.lib + 'metalsmith-debug') : null,
 
   meta = {
     env: {
@@ -57,16 +53,10 @@ var
         { label: 'GitHub', url: 'https://github.com/raae' },
         { label: 'Twitter', url: 'https://twitter.com/raae' },
         { label: 'LinkedIn', url: 'https://no.linkedin.com/in/benedicteraae' },
+        { label: 'Instagram', url: 'https://instagram.com/benedicteraae' },
       ]
     },
-  },
-
-  jadeTemplateConfig = {
-    engine: 'jade',
-    moment: moment,
-    directory: 'src/layouts',
-    default: 'article.jade'
-  };
+  }
 
 console.log((devBuild ? 'Development' : 'Production'), 'build, version', pkg.version);
 
@@ -75,16 +65,30 @@ var ms = metalsmith(dir.base)
   .source(dir.source + 'html/') // source folder (src/html/)
   .destination(dir.dest) // build folder (build/)
   .metadata(meta) // add meta data to every page
+  .use(paths({
+    property: "paths"
+  }))
+  .use((files, metalsmith, done) => {
+    Object.keys(files).forEach(file => {
+      files[file].basename = files[file].paths.name;
+    });
+    done();
+  })
   .use(publish({
     draft: devBuild,
     private: devBuild
   })) // draft, private, future-dated
   .use((files, metalsmith, done) => {
     // hack to make sure collections are not doubled when using browsersync
-    metalsmith._metadata.collections = null
-    metalsmith._metadata.articles = null
-    metalsmith._metadata.common = null
-    done()
+    console.log(metalsmith._metadata);
+    metalsmith._metadata.collections = null;
+    metalsmith._metadata.articles = [];
+    metalsmith._metadata.projects = [];
+    metalsmith._metadata.proposals = [];
+    metalsmith._metadata.common = [];
+
+    console.log(metalsmith._metadata);
+    done();
   })
   .use(markdown()) // convert markdown
   .use(excerpts())
@@ -97,21 +101,45 @@ var ms = metalsmith(dir.base)
       sortBy: 'date',
       reverse: true
     },
+    projects: {
+      pattern: 'projects/**.html',
+      sortBy: 'year',
+      reverse: true
+    },
+    proposals: {
+      pattern: 'proposals/**.html',
+    },
     common: {
-      pattern: 'common/**.html'
+      pattern: 'index.html'
     }
   }))
   .use(permalinks({
-    linksets: [{
-          match: { collection: 'articles' },
-          pattern: ':title'
-      }]
+    linksets: [
+      {
+        match: { collection: 'common' },
+      },
+      {
+        match: { collection: 'articles' },
+        pattern: 'blog/:basename'
+      },
+      {
+        match: { collection: 'projects' },
+      },
+      {
+        match: { collection: 'proposals' },
+        pattern: ':basename'
+      }
+    ]
   }))
-  .use(layouts(jadeTemplateConfig)) // layout templating
+  .use(layouts({
+    engine: 'pug',
+    moment: moment,
+    directory: 'src/layouts',
+    pretty: true,
+    default: 'article.pug'
+  })) // layout templating
 
 if (htmlmin) ms.use(htmlmin()); // minify production HTML
-
-if (debug) ms.use(debug()); // output page debugging information
 
 if (browsersync) ms.use(browsersync({ // start test server
   server: dir.dest,
