@@ -119,9 +119,6 @@ var ms = metalsmith(dir.base)
       {
         match: { collection: 'projects' },
         pattern: 'project/:basename'
-      },
-      {
-        match: { collection: 'projects' },
       }
     ]
   }))
