@@ -163,7 +163,7 @@ body > main {
 
 body > nav a {
   text-decoration: none;
-  color: gray;
+  color: gray !important;
   line-height: 1;
 }
 
