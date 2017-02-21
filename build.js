@@ -30,7 +30,7 @@ var
   wordcount = require("metalsmith-word-count"),
   fileMetadata = require('metalsmith-filemetadata'),
   collections = require('metalsmith-collections'),
-  branch = require('metalsmith-branch'),
+  // branch = require('metalsmith-branch'),
   paths = require('metalsmith-paths'),
   permalinks = require('metalsmith-permalinks'),
   layouts = require('metalsmith-layouts'),
@@ -38,7 +38,6 @@ var
   sitemap = require('metalsmith-mapsite'),
   rssfeed = require('metalsmith-feed'),
   assets = require('metalsmith-assets'),
-  htmlmin = devBuild ? null : require('metalsmith-html-minifier'),
   browsersync = devBuild ? require('metalsmith-browser-sync') : null,
 
   meta = {
@@ -109,7 +108,7 @@ var ms = metalsmith(dir.base)
       sortBy: 'year',
       reverse: true
     }
-  }))
+  })) // create collections
   .use(permalinks({
     linksets: [
       {
@@ -128,30 +127,29 @@ var ms = metalsmith(dir.base)
     directory: 'src/layouts',
     pretty: true,
     default: 'article.pug'
-  })) // layout templating
-
-if (htmlmin) ms.use(htmlmin()); // minify production HTML
-
-if (browsersync) ms.use(browsersync({ // start test server
-  server: dir.dest,
-  files: [dir.source + '**/*']
-}));
-
-ms
-  .use(sitemap({ // generate sitemap.xml
+  }))
+  .use(sitemap({ 
     hostname: meta.site.domain + (meta.site.rootpath || ''),
     omitIndex: true
   }))
-  .use(rssfeed({ // generate RSS feed for articles
+  .use(rssfeed({ 
     collection: 'articles',
     site_url: meta.site.domain,
     title: meta.site.title,
     description: meta.site.description
   }))
-  .use(assets({ // copy assets: CSS, images etc.
+  .use(assets({ 
     source: dir.source + 'assets/',
-    destination: './'
-  }))
-  .build(function(err) { // build
+    destination: './assets/'
+  }));
+
+  if (browsersync) {
+    ms.use(browsersync({
+      server: dir.dest,
+      files: [dir.source + '**/*']
+    }));
+  }
+
+  ms.build(function(err) { // build
     if (err) throw err;
   });
