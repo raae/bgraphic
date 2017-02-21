@@ -2,8 +2,13 @@
 h2
   a(href='/'+entry.path)!= entry.title
 section
-  span= entry.readingTime + '-minute read' 
+  if readingTime
+    span= entry.readingTime + '-minute read' 
   time= moment(entry.publish).format("MMMM Do YYYY")
+  if entry.feed_type=='instagram'
+    span Instagram
+
 
 section
-  p!= entry.blurb
+  if entry.blurb
+    p!= entry.blurb

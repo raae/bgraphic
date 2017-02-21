@@ -5,6 +5,15 @@ block main
     header
       h1= title
       section
-        span= readingTime + '-minute read'
+        if readingTime
+          span= readingTime + '-minute read'
         time= moment(publish).format("MMMM Do YYYY")
-    section!= contents
+        if external_link
+          a(href=external_link) View on Instagram
+
+    section
+      if contents
+        != contents
+      if images
+        p
+          img(src=images.standard_resolution.url)
