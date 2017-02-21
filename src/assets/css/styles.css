@@ -93,25 +93,25 @@ article > section {
   margin-bottom: calc(1em + 0.75vw);
 }
 
-section > ul {
+main > section > ul {
   list-style: none;
   margin: 0;
 }
 
-section > ul li {
+main > section > ul li {
   margin: calc(1rem + 1vw) auto;
 }
 article > section:not(:nth-child(2)) span + span:before,
-section > ul li > section:not(:nth-child(2)) span + span:before {
+main > section > ul li > section:not(:nth-child(2)) span + span:before {
   content: ", \0020";
   text-decoration: none;
 }
 
-section > ul li > section:last-child {
+main > section > ul li > section:last-child {
   font-size: 0.9em;
 }
 
-section > ul li h2,
+main > section > ul li h2,
 main > header h1,
 article > header h1 {
   margin: 0;
