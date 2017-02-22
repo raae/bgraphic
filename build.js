@@ -8,7 +8,9 @@ Build production site with `npm run production`
 
 'use strict';
 
-var
+require('dotenv').config();
+
+const
 // defaults
   consoleLog = false, // set true for metalsmith file and meta content logging
   devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production'),
@@ -29,6 +31,7 @@ var
   publish = require('metalsmith-publish'),
   wordcount = require("metalsmith-word-count"),
   fileMetadata = require('metalsmith-filemetadata'),
+  remote = require('metalsmith-remote-json-to-files'),
   collections = require('metalsmith-collections'),
   // branch = require('metalsmith-branch'),
   paths = require('metalsmith-paths'),
@@ -60,11 +63,44 @@ var
 
 console.log((devBuild ? 'Development' : 'Production'), 'build, version', pkg.version);
 
-var ms = metalsmith(dir.base)
+const ms = metalsmith(dir.base)
   .clean(true) // clean folder before a production build
+    .use((files, metalsmith, done) => {
+    // hack to make sure collections are not doubled when using browsersync
+    metalsmith._metadata.articles = [];
+    metalsmith._metadata.projects = [];
+    metalsmith._metadata.feed = [];
+    done();
+  })
   .source(dir.source + 'html/') // source folder (src/html/)
   .destination(dir.dest) // build folder (build/)
   .metadata(meta) // add meta data to every page
+  .use(remote({
+    url: 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + process.env.IG_ACCESS_TOKEN,
+    "transformOpts": function(json) {
+      return json.data.reduce((prev, item) => {
+        const include = item.tags.filter(item => { return 'devblog' === item.toLowerCase() }).length > 0;
+        if(!include) return prev;
+
+        const filename = `feed/ig-${ item.id }.md`;
+        const caption = item.caption.text.replace('#devblog', '');
+        const date = new Date(parseInt(item.created_time) * 1000).toISOString();
+        return Object.assign(prev, {
+          [filename]: {
+            title: caption,
+            publish: date,
+            feed_type:  'instagram',
+            images: item.images,
+            contents: ''
+          }
+        })
+    }, {})
+    }
+  }))
+  .use(publish({
+    draft: devBuild,
+    private: devBuild
+  }))
   .use(paths({
     property: "paths"
   }))
@@ -74,38 +110,25 @@ var ms = metalsmith(dir.base)
     });
     done();
   })
-  .use(publish({
-    draft: devBuild,
-    private: devBuild
-  })) // draft, private, future-dated
-  .use((files, metalsmith, done) => {
-    // hack to make sure collections are not doubled when using browsersync
-    metalsmith._metadata.articles = [];
-    metalsmith._metadata.projects = [];
-    done();
-  })
   .use(markdown()) // convert markdown
   .use(excerpts())
   .use(wordcount({
     raw: true
   })) // word count
-  .use(fileMetadata([
-    { 
-      pattern: "projects/*", 
-      metadata: {
-        "layout": "project.pug"
-      }
-    },
-  ]))
   .use(collections({
     articles: {
       pattern: 'articles/*',
-      sortBy: 'date',
+      sortBy: 'publish',
       reverse: true
     },
     projects: {
       pattern: 'projects/*',
       sortBy: 'year',
+      reverse: true
+    },
+    feed: {
+      pattern: 'feed/*',
+      sortBy: 'publish',
       reverse: true
     }
   })) // create collections
@@ -121,6 +144,14 @@ var ms = metalsmith(dir.base)
       }
     ]
   }))
+  .use(fileMetadata([
+    { 
+      pattern: "projects/*", 
+      metadata: {
+        "layout": "project.pug"
+      }
+    }
+  ]))
   .use(layouts({
     engine: 'pug',
     moment: moment,
