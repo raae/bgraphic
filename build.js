@@ -76,7 +76,7 @@ const ms = metalsmith(dir.base)
   .destination(dir.dest) // build folder (build/)
   .metadata(meta) // add meta data to every page
   .use(remote({
-    url: 'https://api.instagram.com/v1/users/self/media/recent/?count=150&access_token=' + process.env.IG_ACCESS_TOKEN,
+    url: 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + process.env.IG_ACCESS_TOKEN,
     "transformOpts": function(json) {
       return json.data.reduce((prev, item) => {
         const include = item.tags.filter(item => { return 'devblog' === item.toLowerCase() }).length > 0;
