@@ -65,13 +65,16 @@ console.log((devBuild ? 'Development' : 'Production'), 'build, version', pkg.ver
 
 const ms = metalsmith(dir.base)
   .clean(true) // clean folder before a production build
+    .use((files, metalsmith, done) => {
+    // hack to make sure collections are not doubled when using browsersync
+    metalsmith._metadata.articles = [];
+    metalsmith._metadata.projects = [];
+    metalsmith._metadata.feed = [];
+    done();
+  })
   .source(dir.source + 'html/') // source folder (src/html/)
   .destination(dir.dest) // build folder (build/)
   .metadata(meta) // add meta data to every page
-  .use(publish({
-    draft: devBuild,
-    private: devBuild
-  })) // draft, private, future-dated
   .use(remote({
     url: 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + process.env.IG_ACCESS_TOKEN,
     "transformOpts": function(json) {
@@ -80,7 +83,7 @@ const ms = metalsmith(dir.base)
         return Object.assign(prev, {
           [filename]: {
             title: item.caption.text,
-              date: new Date(parseInt(item.created_time) * 1000).toISOString(),
+              publish: new Date(parseInt(item.created_time) * 1000).toISOString(),
               feed_type:  'instagram',
               images: item.images,
               contents: ''
@@ -89,10 +92,10 @@ const ms = metalsmith(dir.base)
     }, {})
     }
   }))
-  // .use((files, metalsmith, done) => {
-  //   console.log(files);
-  //   done();
-  // })
+  .use(publish({
+    draft: devBuild,
+    private: devBuild
+  }))
   .use(paths({
     property: "paths"
   }))
@@ -100,12 +103,6 @@ const ms = metalsmith(dir.base)
     Object.keys(files).forEach(file => {
       files[file].basename = files[file].paths.name;
     });
-    done();
-  })
-  .use((files, metalsmith, done) => {
-    // hack to make sure collections are not doubled when using browsersync
-    metalsmith._metadata.articles = [];
-    metalsmith._metadata.projects = [];
     done();
   })
   .use(markdown()) // convert markdown
@@ -116,7 +113,7 @@ const ms = metalsmith(dir.base)
   .use(collections({
     articles: {
       pattern: 'articles/*',
-      sortBy: 'date',
+      sortBy: 'publish',
       reverse: true
     },
     projects: {
@@ -126,7 +123,7 @@ const ms = metalsmith(dir.base)
     },
     feed: {
       pattern: 'feed/*',
-      sortBy: 'date',
+      sortBy: 'publish',
       reverse: true
     }
   })) // create collections
