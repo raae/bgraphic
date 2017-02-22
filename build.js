@@ -76,17 +76,22 @@ const ms = metalsmith(dir.base)
   .destination(dir.dest) // build folder (build/)
   .metadata(meta) // add meta data to every page
   .use(remote({
-    url: 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + process.env.IG_ACCESS_TOKEN,
+    url: 'https://api.instagram.com/v1/users/self/media/recent/?count=150&access_token=' + process.env.IG_ACCESS_TOKEN,
     "transformOpts": function(json) {
       return json.data.reduce((prev, item) => {
-        const filename = `feed/ig-${ item.id }.md`
+        const include = item.tags.filter(item => { return 'devblog' === item.toLowerCase() }).length > 0;
+        if(!include) return prev;
+
+        const filename = `feed/ig-${ item.id }.md`;
+        const caption = item.caption.text.replace('#devblog', '');
+        const date = new Date(parseInt(item.created_time) * 1000).toISOString();
         return Object.assign(prev, {
           [filename]: {
-            title: item.caption.text,
-              publish: new Date(parseInt(item.created_time) * 1000).toISOString(),
-              feed_type:  'instagram',
-              images: item.images,
-              contents: ''
+            title: caption,
+            publish: date,
+            feed_type:  'instagram',
+            images: item.images,
+            contents: ''
           }
         })
     }, {})
