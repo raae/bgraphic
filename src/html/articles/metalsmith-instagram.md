@@ -17,3 +17,11 @@ publish: draft
   * Copy out access_token from http://bgraphic.no/#access_token=207958877.d71edcd.d5cc08583f24453893a181d52dd7d060
 
 * Remember to parseInt the created_time string
+
+
+### What you will learn
+* Generate a simple Metalsmith site
+* Use a ready made theme from HTML5 UP to make the site look good
+* Use a Metalsmith plugin to fetch content from Instagram
+* Deploy the site to Netlify
+* Trigger daily deploys using Zapier to keep site current
