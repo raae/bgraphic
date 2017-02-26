@@ -172,6 +172,10 @@ const ms = metalsmith(dir.base)
   .use(assets({ 
     source: dir.source + 'assets/',
     destination: './assets/'
+  }))
+  .use(assets({ 
+    source: dir.source + 'redirects/',
+    destination: './'
   }));
 
   if (browsersync) {
