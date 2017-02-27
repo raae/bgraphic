@@ -24,8 +24,9 @@ use Advanced Custom Fields (ACF). In the pro version, there is a
 field called [Flexible Content](https://www.advancedcustomfields.com/resources/flexible-content/) 
 that make it possible for the editors to create a list of blocks and decide the order of these blocks.
 
-To create the example provided the blocks could be: 
+To create the provided template example the blocks could be: 
 * **Hero** with inputs for text, button, video and video text.
+* **CTA's** with choice of one, two or three
 * **Blog** with inputs for header text and number of post
 * **Divider** with a choice between the fun shapes image or some space
 * **Feed** with inputs for header, RSS link and number of feed entries
@@ -66,13 +67,36 @@ I have family in London and would not need accommodations.
 From the static example provided it is hard to know the need for javascript functionality/enhancements and the 
 complexity of the responsive flow.
 
-Per component:
+A template consists of one or more components. The provided template consists of 9 components (see image in e-mail). Another template could be a blog post template. Such a template would have a post content component in addition to the possibility of adding one or more of the components from the provided template.
+
+**Per component:**
 * 0.5 day discussing the component with Kahoot designers
 * 0.5 day implementing the acf flexible content layout
 * 0.5 day implementing the template/css/js
 * 0.5 day inevitable challenges
 
-= 7.5 hours * 2 = 15 hours
+= 7.5 hours \* 2 days = 15 hours
+
+**Per template:** 
+* 0.5 day setting up template rules (e.g. what components are allowed)
+
+= 7.5 hours \* 0.5 day = 3.25 hours
+
+**Startup:**  
+Setting up the initial workflow generating a static site from a Wordpress site.
+* This estimate is for a Metalsmith generated site hosted on Netlify
+
+= 1 week = 37,5 hours
+
+**The full project:**
+* C = number of components 
+* T = number of templates
+* S = startup cost
+
+= C \* 15 hours + T \* 3.25 hours + S
+
+**The provided template:**  
+= 9 \* 15 hours + 1 \* 3.25 hours + 37.5 hours = 175 hours
 
 **Availability**: From March 15th, possibly full time  
 **Rate**: 1250 NOK per hour
